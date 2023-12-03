@@ -4,19 +4,19 @@
 
 const isPalindrom = (str) => {
 const lowerCaseStrNoGap = str.toLowerCase().replaceAll(' ','');
-const middleLenght= Math.floor(lowerCaseStrNoGap.length/2);
+const middleLenght = Math.floor(lowerCaseStrNoGap.length / 2);
 
-for (let i=0; i<middleLenght; i++) {
+for (let i = 0; i < middleLenght; i++) {
   const leftLetter = lowerCaseStrNoGap[i];
-  const rightLetter=lowerCaseStrNoGap[lowerCaseStrNoGap.length-(i+1)];
+  const rightLetter = lowerCaseStrNoGap[lowerCaseStrNoGap.length - (i + 1)];
 
-if (leftLetter!==rightLetter) {
-return false
+if (leftLetter !== rightLetter) {
+return false;
 }
 }
-return true
-}
-isPalindrom('Лёша на полке клопа нашёл ')
+return true;
+};
+isPalindrom('Лёша на полке клопа нашёл ');
 
 
 /*Функция, которая принимает строку,
@@ -25,18 +25,18 @@ isPalindrom('Лёша на полке клопа нашёл ')
  Если в строке нет ни одной цифры, функция должна вернуть NaN */
 
  const getNumber = (string) => {
-let result='';
+let result = '';
 for (let i = 0; i<string.length; i++) {
 const charToCheck = string[i];
 const number = parseInt(charToCheck, 10);
 if (!isNaN(number)){
-  result+=number
+  result+=number;
 }
 }
-return result===''? NaN :  Number(result)
-}
+return result===''? NaN :  Number(result);
+};
 
-getNumber('батона 007')
+getNumber('батона 007');
 
 
 /*Функция, которая принимает три параметра:
@@ -88,13 +88,13 @@ let lastAdditonalString = additionalString.slice(0,lastAdditonalStringLenght);
 return lastAdditonalString+result;
 }
 
-}
-getString('q', 4, 'we')
+};
+getString('q', 4, 'we');
 
 // Функция для проверки длины строки.
 
 const checkStringLength = (stringNew, maxStringLength) => {
 return (stringNew.length<=maxStringLength)? true : false;
 
-}
-checkStringLength('проверяемая строка', 10)
+};
+checkStringLength('проверяемая строка', 10);
