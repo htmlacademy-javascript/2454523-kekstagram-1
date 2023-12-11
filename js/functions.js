@@ -3,18 +3,18 @@
 //и справа налево.
 
 const isPalindrom = (str) => {
-const lowerCaseStrNoGap = str.toLowerCase().replaceAll(' ','');
-const middleLenght = Math.floor(lowerCaseStrNoGap.length / 2);
+  const lowerCaseStrNoGap = str.toLowerCase().replaceAll(' ','');
+  const middleLenght = Math.floor(lowerCaseStrNoGap.length / 2);
 
-for (let i = 0; i < middleLenght; i++) {
-  const leftLetter = lowerCaseStrNoGap[i];
-  const rightLetter = lowerCaseStrNoGap[lowerCaseStrNoGap.length - (i + 1)];
+  for (let i = 0; i < middleLenght; i++) {
+    const leftLetter = lowerCaseStrNoGap[i];
+    const rightLetter = lowerCaseStrNoGap[lowerCaseStrNoGap.length - (i + 1)];
 
-if (leftLetter !== rightLetter) {
-return false;
-}
-}
-return true;
+    if (leftLetter !== rightLetter) {
+      return false;
+    }
+  }
+  return true;
 };
 isPalindrom('Лёша на полке клопа нашёл ');
 
@@ -24,19 +24,19 @@ isPalindrom('Лёша на полке клопа нашёл ');
  возвращает их в виде целого положительного числа.
  Если в строке нет ни одной цифры, функция должна вернуть NaN */
 
- const getNumber = (string) => {
-let result = '';
-for (let i = 0; i<string.length; i++) {
-const charToCheck = string[i];
-const number = parseInt(charToCheck, 10);
-if (!isNaN(number)){
-  result+=number;
-}
-}
-return result===''? NaN :  Number(result);
+const getNumber = (string) => {
+  let result = '';
+  for (let i = 0; i < string.length; i++) {
+    const charToCheck = string[i];
+    const number = parseInt(charToCheck, 10);
+    if (!isNaN(number)){
+      result += number;
+    }
+  }
+  return result === '' ? NaN : Number(result);
 };
 
-getNumber('батона 007');
+getNumber('а я томат');
 
 
 /*Функция, которая принимает три параметра:
@@ -48,53 +48,51 @@ const getString = (startString, minLength, additionalString) => {
 
   // Добавочный символ использован один раз
 
-if(result.length===minLength){
-  return result;
-}
-// Добавочный символ использован три раза
+  if(result.length === minLength){
+    return result;
+  }
+  // Добавочный символ использован три раза
 
-if (result.length < minLength && additionalString.length===1){
-for(let i=0; i<(minLength-result.length); i){
-  result=additionalString[i] + result;
+  if (result.length < minLength && additionalString.length === 1){
+    for(let i = 0; i < (minLength - result.length); i){
+      result = additionalString[i] + result;
 
-}
-return result;
-}
-// Добавочные символы обрезаны с конца
+    }
+    return result;
+  }
+  // Добавочные символы обрезаны с конца
 
-if (result.length>minLength){
+  if (result.length > minLength){
   // Рассчитаем какой длины должен быть добавочный элемент
-let cuttedAdditionalStringLength = minLength-startString.length;
+    const cuttedAdditionalStringLength = minLength - startString.length;
 
-// получим уже обрезанный добавочный элемент с учетом нужной длины
-let cuttedAdditionalString = additionalString.slice(0,cuttedAdditionalStringLength);
-let newResult = cuttedAdditionalString + startString;
-return newResult;
-}
-// Добавочные символы использованы полтора раза
-if (result.length<minLength) {
+    // получим уже обрезанный добавочный элемент с учетом нужной длины
+    const cuttedAdditionalString = additionalString.slice(0,cuttedAdditionalStringLength);
+    const newResult = cuttedAdditionalString + startString;
+    return newResult;
+  }
+  // Добавочные символы использованы полтора раза
+  if (result.length < minLength) {
   //Рассчитаем сколько длины еще нужно до заданной длины - minLength
-  let additionalLength = minLength - result.length;
-  // Рассчитаем сколько полных раз мы можем прибавить добавочный элемент - additionalString
-  let iterrationCount = Math.floor(additionalLength/additionalString.length);
-for (let i = 0; i < iterrationCount; i++){
-  result=additionalString+result;
-}
-// Рассчитаем оставшуюся длину additionalString  которую надо добавить в конце
-let lastAdditonalStringLenght = additionalLength - iterrationCount*additionalString.length;
+    const additionalLength = minLength - result.length;
+    // Рассчитаем сколько полных раз мы можем прибавить добавочный элемент - additionalString
+    const iterrationCount = Math.floor(additionalLength / additionalString.length);
+    for (let i = 0; i < iterrationCount; i++){
+      result = additionalString + result;
+    }
+    // Рассчитаем оставшуюся длину additionalString  которую надо добавить в конце
+    const lastAdditonalStringLenght = additionalLength - iterrationCount * additionalString.length;
 
-// Получаем последнюю строку, которую надо прибавить
-let lastAdditonalString = additionalString.slice(0,lastAdditonalStringLenght);
-return lastAdditonalString+result;
-}
+    // Получаем последнюю строку, которую надо прибавить
+    const lastAdditonalString = additionalString.slice(0,lastAdditonalStringLenght);
+    return lastAdditonalString + result;
+  }
 
 };
 getString('q', 4, 'we');
 
 // Функция для проверки длины строки.
 
-const checkStringLength = (stringNew, maxStringLength) => {
-return (stringNew.length<=maxStringLength)? true : false;
-
-};
+const checkStringLength = (stringNew, maxStringLength) => (stringNew.length <= maxStringLength);
 checkStringLength('проверяемая строка', 10);
+
