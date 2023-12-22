@@ -76,5 +76,8 @@ const createPhoto = () => ({
 });
 
 const photos = Array.from({length: PHOTO_COUNT}, createPhoto);
+
 console.log(photos);
+
+
 
