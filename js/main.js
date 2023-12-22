@@ -1,87 +1,80 @@
-/*const object = {
-  id: getRandomId(1, 25),
-  url:
-  description: 'description' + object.id
-  likes:
- comments:
+const PHOTO_COUNT = 25;
+const URL_COUNT = 25;
+const AVATAR_COUNT = 6;
+const LIKE_MIN_COUNT = 15;
+const LIKE_MАХ_COUNT = 200;
+const COMMENT_COUNT = 3;
 
-}; */
+const DESCRIPTIONS = ['рыжий кот', 'серый кот', ',белый кот', 'много котов'];
 
-/*const objectInComments = {
-  id: 135,
-  avatar: 'img/avatar-6.svg',
-  message: 'В целом всё неплохо. Но не всё.',
-  name: 'Артём',
-}; */
+const COMMENTATORS_NAMES = [
+  'Иван',
+  'Мария',
+  'Артем',
+  'Виктор',
+  'Юлия',
+  'Александр',
+  'Петр',
+];
 
-// id, число — идентификатор опубликованной фотографии
-// Это число от 1 до 25.
-// Идентификаторы не должны повторяться.
+const textOfCommentaries = {
+  text1: 'Всё отлично!',
+  text2:'В целом всё неплохо. Но не всё.',
+  text3: 'Когда вы делаете фотографию, хорошо бы убирать палец из кадра. В конце концов это просто непрофессионально.',
+  text4: 'Моя бабушка случайно чихнула с фотоаппаратом в руках и у неё получилась фотография лучше.',
+  text5: 'Я поскользнулся на банановой кожуре и уронил фотоаппарат на кота и у меня получилась фотография лучше.',
+  text6: 'Лица у людей на фотке перекошены, как будто их избивают. Как можно было поймать такой неудачный момент?!'
+};
 
-const getRandomId = (minId, maxId) => {
-  const lower = Math.ceil(Math.min(minId, maxId));
-  const upper = Math.floor(Math.max(minId, maxId));
+const getRandomInteger = (a, b) => {
+  const lower = Math.ceil(Math.min(a, b));
+  const upper = Math.floor(Math.max(a, b));
   const result = Math.random() * (upper - lower + 1) + lower;
   return Math.floor(result);
 };
 
-console.log(getRandomId(1, 25));
+function createUniqueInteger (a, b) {
+  const previousValues = [];
 
+  return function () {
+    let currentValue = getRandomInteger(a, b);
+    if (previousValues.length >= (b - a + 1)) {
+      return null;
+    }
+    while (previousValues.includes(currentValue)) {
+      currentValue = getRandomInteger(a, b);
+    }
+    previousValues.push(currentValue);
+    return currentValue;
+  };
+}
 
+const uniqueIntegerForId = createUniqueInteger(1, PHOTO_COUNT);
+const uniqueIntegerForUrl = createUniqueInteger(1,URL_COUNT);
+const uniqueIntegerForCommentsId = createUniqueInteger(1, 10000);
 
-// url, строка — адрес картинки вида photos/{{i}}.jpg,
-// где {{i}} — это число от 1 до 25
-// Адреса картинок не должны повторяться
+const getUrl = () => `photos/${ uniqueIntegerForUrl() }.jpg`;
 
-const getRandomUrl = (minUrl, maxUrl) => {
-  const lower = Math.ceil(Math.min(minUrl, maxUrl));
-  const upper = Math.floor(Math.max(minUrl, maxUrl));
-  const result = Math.random() * (upper - lower + 1) + lower;
-  return Math.floor(result);
-};
+const getAvatar = () => `img/avatar-${ getRandomInteger(1, AVATAR_COUNT) }.svg`;
 
-console.log(getRandomUrl(1, 25));
+const getRandomArrayElement = (elements) => elements[getRandomInteger(0, elements.length - 1)];
 
+const createComments = () => ({
+  id: uniqueIntegerForCommentsId(),
+  avatar: getAvatar(),
+  message: getRandomArrayElement(Object.values(textOfCommentaries)),
+  name: getRandomArrayElement(COMMENTATORS_NAMES),
+});
 
-// Функция для возврата адреса картинки с учетом рандомного url
+const createPhoto = () => ({
+  id: uniqueIntegerForId(),
+  url: getUrl(),
+  likes: getRandomInteger(LIKE_MIN_COUNT, LIKE_MАХ_COUNT),
+  comments:  Array.from({length: getRandomInteger(0, COMMENT_COUNT)}, createComments),
+  description: getRandomArrayElement(DESCRIPTIONS),
 
-const getUrl = (minUrl, maxUrl) => {
-return 'photos/' + getRandomUrl(minUrl, maxUrl) + '.jpg';
-};
+});
 
-console.log(getUrl(1, 25));
-
-// description, строка — описание фотографии. Описание придумайте самостоятельно.
-// описанием будет конкатенация между словом description и номером id картинки
-// Функция для описания фотографии (ДОДЕЛАТЬ!)
-
-const getDescription = (id) => {
-return 'description: ' + id
-
-};
-
-console.log(getDescription());
-
-// likes, число — количество лайков, поставленных фотографии.
-//Случайное число от 15 до 200.
-
-const getRandomLikes = (minLikes, maxLikes) => {
-  const lower = Math.ceil(Math.min(minLikes, maxLikes));
-  const upper = Math.floor(Math.max(minLikes, maxLikes));
-  const result = Math.random() * (upper - lower + 1) + lower;
-  return Math.floor(result);
-};
-
-console.log(getRandomLikes(15, 200));
-
-//comments, массив объектов — список комментариев, оставленных другими пользователями
-// к этой фотографии. Количество комментариев к каждой фотографии вы определяете на своё
-//усмотрение. Все комментарии генерируются случайным образом.
-//Пример описания объекта с комментарием:
-/*const objectInComments = {
-  id: 135,
-  avatar: 'img/avatar-6.svg',
-  message: 'В целом всё неплохо. Но не всё.',
-  name: 'Артём',
-}; */
+const photos = Array.from({length: PHOTO_COUNT}, createPhoto);
+console.log(photos);
 
