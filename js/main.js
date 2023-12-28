@@ -4,8 +4,9 @@ const AVATAR_COUNT = 6;
 const LIKE_MIN_COUNT = 15;
 const LIKE_MАХ_COUNT = 200;
 const COMMENT_COUNT = 3;
+const COMMENT_ID_COUNT = 10000;
 
-const DESCRIPTIONS = ['рыжий кот', 'серый кот', ',белый кот', 'много котов'];
+const DESCRIPTIONS = ['рыжий кот', 'серый кот', 'белый кот', 'много котов'];
 
 const COMMENTATORS_NAMES = [
   'Иван',
@@ -17,14 +18,14 @@ const COMMENTATORS_NAMES = [
   'Петр',
 ];
 
-const textOfCommentaries = {
-  text1: 'Всё отлично!',
-  text2:'В целом всё неплохо. Но не всё.',
-  text3: 'Когда вы делаете фотографию, хорошо бы убирать палец из кадра. В конце концов это просто непрофессионально.',
-  text4: 'Моя бабушка случайно чихнула с фотоаппаратом в руках и у неё получилась фотография лучше.',
-  text5: 'Я поскользнулся на банановой кожуре и уронил фотоаппарат на кота и у меня получилась фотография лучше.',
-  text6: 'Лица у людей на фотке перекошены, как будто их избивают. Как можно было поймать такой неудачный момент?!'
-};
+const COMMENT_TEXTS = [
+  'Всё отлично!',
+  'В целом всё неплохо. Но не всё.',
+  'Когда вы делаете фотографию, хорошо бы убирать палец из кадра. В конце концов это просто непрофессионально.',
+  'Моя бабушка случайно чихнула с фотоаппаратом в руках и у неё получилась фотография лучше.',
+  'Я поскользнулся на банановой кожуре и уронил фотоаппарат на кота и у меня получилась фотография лучше.',
+  'Лица у людей на фотке перекошены, как будто их избивают. Как можно было поймать такой неудачный момент?!'
+];
 
 const getRandomInteger = (a, b) => {
   const lower = Math.ceil(Math.min(a, b));
@@ -33,16 +34,17 @@ const getRandomInteger = (a, b) => {
   return Math.floor(result);
 };
 
-function createUniqueInteger (a, b) {
+function createUniqueInteger (min, max) {
   const previousValues = [];
 
   return function () {
-    let currentValue = getRandomInteger(a, b);
-    if (previousValues.length >= (b - a + 1)) {
+    let currentValue = getRandomInteger(min, max);
+    if (previousValues.length >= (max - min + 1)) {
+      console.error(`Перебраны все числа из диапазона от ${ min } до ${ max}`);
       return null;
     }
     while (previousValues.includes(currentValue)) {
-      currentValue = getRandomInteger(a, b);
+      currentValue = getRandomInteger(min, max);
     }
     previousValues.push(currentValue);
     return currentValue;
@@ -51,7 +53,7 @@ function createUniqueInteger (a, b) {
 
 const uniqueIntegerForId = createUniqueInteger(1, PHOTO_COUNT);
 const uniqueIntegerForUrl = createUniqueInteger(1,URL_COUNT);
-const uniqueIntegerForCommentsId = createUniqueInteger(1, 10000);
+const uniqueIntegerForCommentsId = createUniqueInteger(1, COMMENT_ID_COUNT);
 
 const getUrl = () => `photos/${ uniqueIntegerForUrl() }.jpg`;
 
@@ -62,7 +64,7 @@ const getRandomArrayElement = (elements) => elements[getRandomInteger(0, element
 const createComments = () => ({
   id: uniqueIntegerForCommentsId(),
   avatar: getAvatar(),
-  message: getRandomArrayElement(Object.values(textOfCommentaries)),
+  message: getRandomArrayElement(COMMENT_TEXTS),
   name: getRandomArrayElement(COMMENTATORS_NAMES),
 });
 
@@ -75,9 +77,5 @@ const createPhoto = () => ({
 
 });
 
-const photos = Array.from({length: PHOTO_COUNT}, createPhoto);
-
-console.log(photos);
-
-
-
+const getPhotos = () => Array.from({length: PHOTO_COUNT}, createPhoto);
+getPhotos();
