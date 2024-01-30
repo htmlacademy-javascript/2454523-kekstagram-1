@@ -5,7 +5,7 @@ const URL_COUNT = 25;
 const AVATAR_COUNT = 6;
 const LIKE_MIN_COUNT = 15;
 const LIKE_MАХ_COUNT = 200;
-const COMMENT_COUNT = 3;
+const COMMENT_COUNT = 17;
 const COMMENT_ID_COUNT = 10000;
 
 const DESCRIPTIONS = ['рыжий кот', 'серый кот', 'белый кот', 'много котов'];
@@ -57,4 +57,3 @@ const createPhoto = () => ({
 const getPhotos = () => Array.from({length: PHOTO_COUNT}, createPhoto);
 
 export {getPhotos};
-
