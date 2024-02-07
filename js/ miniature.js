@@ -1,21 +1,29 @@
 import {getPhotos} from './data.js';
 
-const picturesContainer = document.querySelector('.pictures');
-const pictureTemplate = document.querySelector('#picture')
+const miniaturesContainer = document.querySelector('.pictures');
+const miniatureTemplate = document.querySelector('#picture')
   .content
   .querySelector('.picture');
 
-const pictures = getPhotos();
-
-const picturesContainerFragment = document.createDocumentFragment();
-
-pictures.forEach((picture) => {
-  const pictureElement = pictureTemplate.cloneNode(true);
+const createMiniature = (picture) => {
+  const pictureElement = miniatureTemplate.cloneNode(true);
   pictureElement.querySelector('.picture__img').src = picture.url;
   pictureElement.querySelector('.picture__likes').textContent = picture.likes;
   pictureElement.querySelector('.picture__comments').textContent = picture.comments.length;
+  pictureElement.dataset.pictureDescription = picture.description;
+  pictureElement.pictureComments = picture.comments;
 
-  picturesContainerFragment.append(pictureElement);
-});
+  return pictureElement;
+};
 
-picturesContainer.append(picturesContainerFragment);
+const renderMiniatures = (pictures) => {
+  const fragment = document.createDocumentFragment();
+  pictures.forEach((picture) => {
+    const miniatureElement = createMiniature(picture);
+    fragment.append(miniatureElement);
+  });
+
+  miniaturesContainer.append(fragment);
+};
+
+renderMiniatures(getPhotos());
