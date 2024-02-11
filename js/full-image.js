@@ -1,4 +1,5 @@
 import { isEscapeKey } from './util.js';
+import { pictures } from './ miniature.js';
 
 const bigPicture = document.querySelector('.big-picture');
 const allMiniatures = document.querySelectorAll('.picture');
@@ -43,19 +44,21 @@ const openBigPicture = () => {
   document.addEventListener('keydown', onDocumentKeydown);
 } ;
 
-const createBigPicture = (miniature) => {
-  bigPictureImg.src = miniature.querySelector('.picture__img').src;
-  bigPicture.querySelector('.likes-count').textContent = miniature.querySelector('.picture__likes').textContent;
-  bigPicture.querySelector('.comments-count').textContent = miniature.querySelector('.picture__comments').textContent;
-  bigPicture.querySelector('.social__caption').textContent = miniature.dataset.pictureDescription;
-  renderComments(miniature.pictureComments);
+const createBigPicture = (picturesArray, miniature) => {
 
+  const picture = picturesArray.find((pic) => pic.id === +miniature.dataset.id);
+
+  bigPictureImg.src = picture.url;
+  bigPicture.querySelector('.likes-count').textContent = picture.likes;
+  bigPicture.querySelector('.comments-count').textContent = picture.comments.length;
+  bigPicture.querySelector('.social__caption').textContent = picture.description;
+  renderComments(picture.comments);
 };
 
-
 allMiniatures.forEach((miniature)=> {
-  miniature.addEventListener('click', (evt) => {
-    createBigPicture(miniature);
+  miniature.addEventListener('click', () => {
+
+    createBigPicture(pictures,miniature);
     openBigPicture();
   });
 
