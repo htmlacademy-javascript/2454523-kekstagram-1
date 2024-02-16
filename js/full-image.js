@@ -7,6 +7,7 @@ const bigPictureCloseElement = document.querySelector('.big-picture__cancel');
 const bigPictureImg = bigPicture.querySelector('.big-picture__img').querySelector('img');
 const socialCommentElement = document.querySelector('.social__comment');
 const commentsContainerElement = document.querySelector('.social__comments');
+const COMMENTS_PER_PAGE = 5;
 
 const onDocumentKeydown = (evt) => {
   if (isEscapeKey(evt)) {
@@ -25,7 +26,7 @@ const createCommentElement = (comment)=>{
   return commentElement;
 };
 
-const getSubCommentsArray = (firsIndex,lastIndex, comments) => comments.slice(firsIndex,lastIndex);
+const getSubCommentsArray = (comments, firstIndex,lastIndex) => comments.slice(firstIndex,lastIndex);
 
 const appendCommentsBlock = (comments) => {
   const commentsContainerFragment = document.createDocumentFragment();
@@ -39,29 +40,26 @@ const appendCommentsBlock = (comments) => {
 const renderComments = (comments) => {
   commentsContainerElement.innerHTML = '';
 
-  let firsCommentIndex = 0;
-  let lastCommentsIndex = 5;
+  let firstCommentIndex = 0;
+  let lastCommentsIndex = COMMENTS_PER_PAGE;
 
-  const currentCommentsArray = getSubCommentsArray(firsCommentIndex,lastCommentsIndex,comments);
+  const currentCommentsArray = getSubCommentsArray(comments,firstCommentIndex,lastCommentsIndex);
   appendCommentsBlock(currentCommentsArray);
   let commentsCountForShow = currentCommentsArray.length;
   bigPicture.querySelector('.social__comment-count').firstChild.textContent = `${commentsCountForShow } из `;
 
   bigPicture.querySelector('.comments-loader').addEventListener('click', ()=> {
-    firsCommentIndex += 5;
-    lastCommentsIndex += 5;
+    firstCommentIndex += COMMENTS_PER_PAGE;
+    lastCommentsIndex += COMMENTS_PER_PAGE;
     if (lastCommentsIndex <= comments.length) {
-      const nextCommentsArray = getSubCommentsArray(firsCommentIndex,lastCommentsIndex,comments);
-      appendCommentsBlock(nextCommentsArray);
-      commentsCountForShow += 5;
-      bigPicture.querySelector('.social__comment-count').firstChild.textContent = `${commentsCountForShow } из `;
+      commentsCountForShow += COMMENTS_PER_PAGE;
     } else {
       lastCommentsIndex = comments.length + 1;
-      const nextCommentsArray = getSubCommentsArray(firsCommentIndex,lastCommentsIndex,comments);
-      appendCommentsBlock(nextCommentsArray);
       commentsCountForShow = comments.length;
-      bigPicture.querySelector('.social__comment-count').firstChild.textContent = `${commentsCountForShow } из `;
     }
+    const nextCommentsArray = getSubCommentsArray(comments,firstCommentIndex,lastCommentsIndex);
+    appendCommentsBlock(nextCommentsArray);
+    bigPicture.querySelector('.social__comment-count').firstChild.textContent = `${commentsCountForShow } из `;
   });
 
 };
