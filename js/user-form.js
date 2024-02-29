@@ -1,4 +1,6 @@
 import { isEscapeKey } from './util.js';
+import {setDefaultScale} from './scale.js';
+import {setDefaultEffect} from './effect-slider.js';
 const imgUploadForm = document.querySelector('.img-upload__form');
 const fileUploadControl = imgUploadForm.querySelector('#upload-file');
 const uploadCancelButton = imgUploadForm.querySelector('#upload-cancel');
@@ -26,6 +28,8 @@ fileUploadControl.addEventListener('change', ()=>{
   imgUploadForm.querySelector('.img-upload__overlay').classList.remove('hidden');
   document.body.classList.add('modal-open');
   document.addEventListener('keydown', onDocumentKeydown);
+  setDefaultScale();
+  setDefaultEffect();
 });
 
 
@@ -49,29 +53,34 @@ const pristine = new Pristine(imgUploadForm, {
   errorTextClass: 'img-upload__field-wrapper__error',
 });
 
-const validateHashTag = (value) => {
-  const arrayOfHashtag = value.split('#');
-  arrayOfHashtag.shift();
+const isHashTagValid = (hashTag) => {
   const hashTagRegEx = /^#[a-zа-яё0-9]{1,19}$/i;
-  if (arrayOfHashtag.length >= 0 && arrayOfHashtag.length <= MAX_HASHTAG_COUNT) {
-    const newArrayForHashTag = [];
-    for (let i = 0; i < arrayOfHashtag.length; i++) {
-      const hashTagNew = `#${ arrayOfHashtag[i].trimEnd()}`;
-      if (!hashTagRegEx.test(hashTagNew)) {
-        return false;
-      }
-      if (newArrayForHashTag.includes(hashTagNew)) {
-        return false;
-      } else {
-        newArrayForHashTag.push(hashTagNew);
-      }
-    }
+  return hashTagRegEx.test(hashTag);
+};
+
+const validateHashTag = (value) => {
+  if (value === '') {
     return true;
   }
-  if (arrayOfHashtag.length > MAX_HASHTAG_COUNT) {
-    return false;
+  const arrayOfHashtag = value.split(' ').filter((tag) => tag !== '');
+  const newArrayForHashTag = [];
+  for (let i = 0; i < arrayOfHashtag.length; i++) {
+    if (!isHashTagValid(arrayOfHashtag[i])) {
+      return false;
+    }
+    if(newArrayForHashTag.includes(arrayOfHashtag[i])){
+      return false;
+    } else {
+      newArrayForHashTag.push(arrayOfHashtag[i]);
+    }
+    if (arrayOfHashtag.length > MAX_HASHTAG_COUNT) {
+      return false;
+    }
   }
+  return true;
+
 };
+
 
 pristine.addValidator(
   imgUploadForm.querySelector('.text__hashtags'),
