@@ -39,11 +39,7 @@ const updateFilter = () => {
   }
 };
 
-
-effectSlider.noUiSlider.on('update', () => {
-  updateFilter();
-}
-);
+effectSlider.noUiSlider.on('update', updateFilter);
 
 const updateEffectSlider = () => {
   if (imgUploadPreview.classList.contains('effects__preview--chrome')) {
