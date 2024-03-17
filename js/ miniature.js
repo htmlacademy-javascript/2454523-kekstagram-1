@@ -1,10 +1,7 @@
-import {getPhotos} from './data.js';
-
 const miniaturesContainer = document.querySelector('.pictures');
 const miniatureTemplate = document.querySelector('#picture')
   .content
   .querySelector('.picture');
-const pictures = getPhotos();
 
 const createMiniature = (picture) => {
   const pictureElement = miniatureTemplate.cloneNode(true);
@@ -16,15 +13,13 @@ const createMiniature = (picture) => {
   return pictureElement;
 };
 
-const renderMiniatures = (arrayPictures) => {
+const renderMiniatures = (picturesFromServer) => {
   const fragment = document.createDocumentFragment();
-  arrayPictures.forEach((picture) => {
+  picturesFromServer.forEach((picture) => {
     const miniatureElement = createMiniature(picture);
     fragment.append(miniatureElement);
   });
 
   miniaturesContainer.append(fragment);
 };
-
-renderMiniatures(pictures);
-export {pictures};
+export {renderMiniatures};
