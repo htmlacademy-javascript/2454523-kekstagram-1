@@ -1,8 +1,9 @@
 import { isEscapeKey } from './util.js';
 import {setDefaultScale} from './scale.js';
 import {setDefaultEffect} from './effect-slider.js';
-import { sendData } from './api.js';
+import {sendUserFormDatatoServer} from './api.js';
 const MAX_HASHTAG_COUNT = 5;
+const COMMENTS_LENGTH = 140;
 const imgUploadForm = document.querySelector('.img-upload__form');
 const fileUploadControl = imgUploadForm.querySelector('#upload-file');
 const uploadCancelButton = imgUploadForm.querySelector('#upload-cancel');
@@ -103,7 +104,7 @@ pristine.addValidator(
 
 
 const validateCommentsField = (value) => {
-  if(value.length <= 140) {
+  if(value.length <= COMMENTS_LENGTH) {
     submitButton.disabled = false;
     return true;
   } else {
@@ -114,7 +115,7 @@ const validateCommentsField = (value) => {
 pristine.addValidator(
   imgUploadForm.querySelector('.text__description'),
   validateCommentsField,
-  'Не более 140 символов'
+  `Не более ${ COMMENTS_LENGTH } символов`
 );
 
 const openResultElement = (template) => {
@@ -148,7 +149,7 @@ const setUserFormSubmit = (onSuccess) => {
     const isValid = pristine.validate();
     if (isValid) {
       const formData = new FormData(evt.target);
-      sendData(formData,onSuccess,successTemplate,errorTemplate);
+      sendUserFormDatatoServer(formData,onSuccess,successTemplate,errorTemplate);
     }
   });
 };

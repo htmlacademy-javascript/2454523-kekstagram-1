@@ -5,7 +5,7 @@ import {openResultElement} from './user-form.js';
 
 const BASE_URL = 'https://28.javascript.htmlacademy.pro/kekstagram';
 
-const getData = () => {
+const getPicturesFromServer = () => {
   fetch (`${BASE_URL}/data`)
     .then((response) => {
       if (!response.ok) {
@@ -23,7 +23,7 @@ const getData = () => {
 };
 
 
-const sendData = (body, onSuccess, successTemplate, errorTemplate) => {
+const sendUserFormDatatoServer = (body, onSuccess, successTemplate, errorTemplate) => {
   fetch(
     BASE_URL,
     {
@@ -46,4 +46,4 @@ const sendData = (body, onSuccess, successTemplate, errorTemplate) => {
 
 };
 
-export {getData, sendData};
+export {getPicturesFromServer, sendUserFormDatatoServer};
