@@ -1,8 +1,6 @@
 import { isEscapeKey } from './util.js';
-import { pictures } from './ miniature.js';
 
 const bigPicture = document.querySelector('.big-picture');
-const allMiniatures = document.querySelectorAll('.picture');
 const bigPictureCloseElement = document.querySelector('.big-picture__cancel');
 const bigPictureImg = bigPicture.querySelector('.big-picture__img').querySelector('img');
 const socialCommentElement = document.querySelector('.social__comment');
@@ -84,14 +82,17 @@ const createBigPicture = (picturesArray, miniature) => {
   renderComments(picture.comments);
 };
 
-allMiniatures.forEach((miniature)=> {
-  miniature.addEventListener('click', () => {
+const getBigPicture = (pictures) => {
+  const allMiniatures = document.querySelectorAll('.picture');
+  allMiniatures.forEach((miniature)=> {
+    miniature.addEventListener('click', () => {
 
-    createBigPicture(pictures,miniature);
-    openBigPicture();
+      createBigPicture(pictures,miniature);
+      openBigPicture();
+    });
+
   });
-
-});
+};
 
 const closeBigPicture = () => {
   bigPicture.classList.add('hidden');
@@ -103,3 +104,6 @@ const closeBigPicture = () => {
 bigPictureCloseElement.addEventListener('click', () => {
   closeBigPicture();
 });
+
+export {getBigPicture};
+
