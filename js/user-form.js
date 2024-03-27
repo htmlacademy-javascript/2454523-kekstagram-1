@@ -11,13 +11,12 @@ const inputHashTag = imgUploadForm.querySelector('.text__hashtags');
 const inputTextDescription = imgUploadForm.querySelector('.text__description');
 const submitButton = imgUploadForm.querySelector('.img-upload__submit');
 
-
 const successTemplate = document.querySelector('#success').content.querySelector('.success');
 const errorTemplate = document.querySelector('#error').content.querySelector('.error');
 
 const onDocumentKeydown = (evt) => {
   if (isEscapeKey(evt)) {
-    if(document.activeElement !== inputHashTag && document.activeElement !== inputTextDescription){
+    if(document.activeElement !== inputHashTag && document.activeElement !== inputTextDescription && !errorTemplate.includes('hidden')){
       evt.preventDefault();
       imgUploadForm.querySelector('.img-upload__overlay').classList.add('hidden');
       document.body.classList.remove('modal-open');
@@ -35,6 +34,7 @@ fileUploadControl.addEventListener('change', ()=>{
   setDefaultScale();
   setDefaultEffect();
   submitButton.disabled = false;
+  imgUploadForm.querySelector('#effect-none').checked = true;
 });
 
 
@@ -66,31 +66,23 @@ const isHashTagValid = (hashTag) => {
 
 const validateHashTag = (value) => {
   if (value === '') {
-    submitButton.disabled = false;
     return true;
   }
   const arrayOfHashtag = value.split(' ').filter((tag) => tag !== '');
   const newArrayForHashTag = [];
   for (let i = 0; i < arrayOfHashtag.length; i++) {
     if (!isHashTagValid(arrayOfHashtag[i])) {
-      submitButton.disabled = true;
       return false;
     }
-    if(newArrayForHashTag.includes(arrayOfHashtag[i])){
-      submitButton.disabled = true;
-
+    if(newArrayForHashTag.includes(arrayOfHashtag[i].toLowerCase())){
       return false;
     } else {
       newArrayForHashTag.push(arrayOfHashtag[i]);
     }
     if (arrayOfHashtag.length > MAX_HASHTAG_COUNT) {
-      submitButton.disabled = true;
-
       return false;
     }
   }
-  submitButton.disabled = false;
-
   return true;
 
 };
@@ -103,14 +95,7 @@ pristine.addValidator(
 );
 
 
-const validateCommentsField = (value) => {
-  if(value.length <= COMMENTS_LENGTH) {
-    submitButton.disabled = false;
-    return true;
-  } else {
-    submitButton.disabled = true;
-  }
-};
+const validateCommentsField = (value) => value.length <= COMMENTS_LENGTH;
 
 pristine.addValidator(
   imgUploadForm.querySelector('.text__description'),
@@ -125,6 +110,7 @@ const openResultElement = (template) => {
     if (isEscapeKey(evt)) {
       evt.preventDefault();
       resultElement.remove();
+      submitButton.disabled = false;
     }
   };
   document.addEventListener('keydown', onDocumentKeydownEscForResultElement);
@@ -132,6 +118,7 @@ const openResultElement = (template) => {
   const onDocumentClickOutsideResultElement = (evt) =>{
     if (!resultElement.querySelector('div').contains(evt.target)) {
       resultElement.remove();
+      submitButton.disabled = false;
     }
   };
   document.addEventListener('click',onDocumentClickOutsideResultElement);
@@ -139,17 +126,18 @@ const openResultElement = (template) => {
   const closeButton = resultElement.querySelector('button');
   closeButton.addEventListener('click', ()=>{
     resultElement.remove();
+    submitButton.disabled = false;
   });
 };
 
 const setUserFormSubmit = (onSuccess) => {
   imgUploadForm.addEventListener('submit', (evt)=>{
     evt.preventDefault();
-    submitButton.disabled = true;
     const isValid = pristine.validate();
     if (isValid) {
       const formData = new FormData(evt.target);
       sendUserFormDatatoServer(formData,onSuccess,successTemplate,errorTemplate);
+      submitButton.disabled = true;
     }
   });
 };

@@ -4,6 +4,10 @@ import {openResultElement} from './user-form.js';
 import { onRandomSortButtonClick, onDefaultSortButtonClick, onDiscussedSortButtonClick } from './ miniature.js';
 const RERENDER_DELAY = 500;
 
+
+const debouncedRenderMiniature = debounce(renderMiniatures, RERENDER_DELAY);
+
+
 const BASE_URL = 'https://28.javascript.htmlacademy.pro/kekstagram';
 
 const getPicturesFromServer = () => {
@@ -16,10 +20,9 @@ const getPicturesFromServer = () => {
     })
     .then ((picturesFromServer) => {
       renderMiniatures(picturesFromServer);
-      const debouncedRanderMiniature = debounce(renderMiniatures, RERENDER_DELAY);
-      onRandomSortButtonClick(picturesFromServer, debouncedRanderMiniature);
-      onDefaultSortButtonClick(picturesFromServer, debouncedRanderMiniature);
-      onDiscussedSortButtonClick(picturesFromServer, debouncedRanderMiniature);
+      onRandomSortButtonClick(picturesFromServer, debouncedRenderMiniature);
+      onDefaultSortButtonClick(picturesFromServer, debouncedRenderMiniature);
+      onDiscussedSortButtonClick(picturesFromServer, debouncedRenderMiniature);
     })
     .catch (()=> {
       showAlert ('Не получилось загрузить данные! Обновите страницу!');
