@@ -1,7 +1,12 @@
 import {renderMiniatures} from './ miniature.js';
-import {getBigPicture} from './full-image.js';
-import {showAlert} from './util.js';
+import {showAlert, debounce} from './util.js';
 import {openResultElement} from './user-form.js';
+import { onRandomSortButtonClick, onDefaultSortButtonClick, onDiscussedSortButtonClick } from './ miniature.js';
+const RERENDER_DELAY = 500;
+
+
+const debouncedRenderMiniature = debounce(renderMiniatures, RERENDER_DELAY);
+
 
 const BASE_URL = 'https://28.javascript.htmlacademy.pro/kekstagram';
 
@@ -15,7 +20,9 @@ const getPicturesFromServer = () => {
     })
     .then ((picturesFromServer) => {
       renderMiniatures(picturesFromServer);
-      getBigPicture(picturesFromServer);
+      onRandomSortButtonClick(picturesFromServer, debouncedRenderMiniature);
+      onDefaultSortButtonClick(picturesFromServer, debouncedRenderMiniature);
+      onDiscussedSortButtonClick(picturesFromServer, debouncedRenderMiniature);
     })
     .catch (()=> {
       showAlert ('Не получилось загрузить данные! Обновите страницу!');
