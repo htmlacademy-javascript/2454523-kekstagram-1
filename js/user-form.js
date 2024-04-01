@@ -2,6 +2,8 @@ import { isEscapeKey } from './util.js';
 import {setDefaultScale} from './scale.js';
 import {setDefaultEffect} from './effect-slider.js';
 import {sendUserFormDatatoServer} from './api.js';
+
+const FILE_TYPES = ['jpg', 'jpeg', 'png'];
 const MAX_HASHTAG_COUNT = 5;
 const COMMENTS_LENGTH = 140;
 const imgUploadForm = document.querySelector('.img-upload__form');
@@ -10,13 +12,17 @@ const uploadCancelButton = imgUploadForm.querySelector('#upload-cancel');
 const inputHashTag = imgUploadForm.querySelector('.text__hashtags');
 const inputTextDescription = imgUploadForm.querySelector('.text__description');
 const submitButton = imgUploadForm.querySelector('.img-upload__submit');
+const photoPrewiev = imgUploadForm.querySelector ('.img-upload__preview img');
 
 const successTemplate = document.querySelector('#success').content.querySelector('.success');
 const errorTemplate = document.querySelector('#error').content.querySelector('.error');
 
 const onDocumentKeydown = (evt) => {
   if (isEscapeKey(evt)) {
-    if(document.activeElement !== inputHashTag && document.activeElement !== inputTextDescription && !errorTemplate.includes('hidden')){
+    const errorElement = document.querySelector('.error__inner');
+    if (errorElement !== null) {
+      errorElement.remove();
+    } else if(document.activeElement !== inputHashTag && document.activeElement !== inputTextDescription){
       evt.preventDefault();
       imgUploadForm.querySelector('.img-upload__overlay').classList.add('hidden');
       document.body.classList.remove('modal-open');
@@ -24,6 +30,16 @@ const onDocumentKeydown = (evt) => {
       inputHashTag.value = '';
       inputTextDescription.value = '';
     }
+  }
+};
+
+const uploadPhoto = () => {
+  const file = fileUploadControl.files[0];
+  const fileName = file.name.toLowerCase();
+
+  const matches = FILE_TYPES.some((type) => fileName.endsWith(type));
+  if (matches) {
+    photoPrewiev.src = URL.createObjectURL(file);
   }
 };
 
@@ -35,6 +51,8 @@ fileUploadControl.addEventListener('change', ()=>{
   setDefaultEffect();
   submitButton.disabled = false;
   imgUploadForm.querySelector('#effect-none').checked = true;
+  uploadPhoto();
+
 });
 
 
@@ -103,30 +121,39 @@ pristine.addValidator(
   `Не более ${ COMMENTS_LENGTH } символов`
 );
 
+const onDocumentKeydownEscForResultElement = (evt,resultElement) => {
+  if (isEscapeKey(evt)) {
+    evt.preventDefault();
+    resultElement.remove();
+    submitButton.disabled = false;
+  }
+};
+
+const onDocumentClickOutsideResultElement = (evt,resultElement) =>{
+  if (!resultElement.querySelector('div').contains(evt.target)) {
+    resultElement.remove();
+    submitButton.disabled = false;
+  }
+};
+
+const closeResultElement = (resultElement) => {
+  resultElement.remove();
+  submitButton.disabled = false;
+};
+
 const openResultElement = (template) => {
   const resultElement = template.cloneNode(true);
   document.body.insertAdjacentElement('beforeend', resultElement);
-  const onDocumentKeydownEscForResultElement = (evt) => {
-    if (isEscapeKey(evt)) {
-      evt.preventDefault();
-      resultElement.remove();
-      submitButton.disabled = false;
-    }
-  };
-  document.addEventListener('keydown', onDocumentKeydownEscForResultElement);
-
-  const onDocumentClickOutsideResultElement = (evt) =>{
-    if (!resultElement.querySelector('div').contains(evt.target)) {
-      resultElement.remove();
-      submitButton.disabled = false;
-    }
-  };
-  document.addEventListener('click',onDocumentClickOutsideResultElement);
+  document.addEventListener('keydown', (evt) => {
+    onDocumentKeydownEscForResultElement (evt,resultElement);
+  });
+  document.addEventListener('click', (evt) => {
+    onDocumentClickOutsideResultElement(evt,resultElement);
+  });
 
   const closeButton = resultElement.querySelector('button');
   closeButton.addEventListener('click', ()=>{
-    resultElement.remove();
-    submitButton.disabled = false;
+    closeResultElement(resultElement);
   });
 };
 
