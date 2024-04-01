@@ -121,30 +121,39 @@ pristine.addValidator(
   `Не более ${ COMMENTS_LENGTH } символов`
 );
 
+const onDocumentKeydownEscForResultElement = (evt,resultElement) => {
+  if (isEscapeKey(evt)) {
+    evt.preventDefault();
+    resultElement.remove();
+    submitButton.disabled = false;
+  }
+};
+
+const onDocumentClickOutsideResultElement = (evt,resultElement) =>{
+  if (!resultElement.querySelector('div').contains(evt.target)) {
+    resultElement.remove();
+    submitButton.disabled = false;
+  }
+};
+
+const closeResultElement = (resultElement) => {
+  resultElement.remove();
+  submitButton.disabled = false;
+};
+
 const openResultElement = (template) => {
   const resultElement = template.cloneNode(true);
   document.body.insertAdjacentElement('beforeend', resultElement);
-  const onDocumentKeydownEscForResultElement = (evt) => {
-    if (isEscapeKey(evt)) {
-      evt.preventDefault();
-      resultElement.remove();
-      submitButton.disabled = false;
-    }
-  };
-  document.addEventListener('keydown', onDocumentKeydownEscForResultElement);
-
-  const onDocumentClickOutsideResultElement = (evt) =>{
-    if (!resultElement.querySelector('div').contains(evt.target)) {
-      resultElement.remove();
-      submitButton.disabled = false;
-    }
-  };
-  document.addEventListener('click',onDocumentClickOutsideResultElement);
+  document.addEventListener('keydown', (evt) => {
+    onDocumentKeydownEscForResultElement (evt,resultElement);
+  });
+  document.addEventListener('click', (evt) => {
+    onDocumentClickOutsideResultElement(evt,resultElement);
+  });
 
   const closeButton = resultElement.querySelector('button');
   closeButton.addEventListener('click', ()=>{
-    resultElement.remove();
-    submitButton.disabled = false;
+    closeResultElement(resultElement);
   });
 };
 
