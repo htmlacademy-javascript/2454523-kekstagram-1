@@ -15,6 +15,7 @@ const successTemplate = document.querySelector('#success').content.querySelector
 const errorTemplate = document.querySelector('#error').content.querySelector('.error');
 
 const onDocumentKeydown = (evt) => {
+
   if (isEscapeKey(evt)) {
     if(document.activeElement !== inputHashTag && document.activeElement !== inputTextDescription && !errorTemplate.includes('hidden')){
       evt.preventDefault();
