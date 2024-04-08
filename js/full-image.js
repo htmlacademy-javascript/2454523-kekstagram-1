@@ -12,8 +12,7 @@ const commentsLoaderButton = document.querySelector('.comments-loader');
 const onDocumentKeydown = (evt) => {
   if (isEscapeKey(evt)) {
     evt.preventDefault();
-    bigPicture.classList.add('hidden');
-    document.body.classList.remove('modal-open');
+    closeBigPicture();
   }
 };
 
@@ -101,12 +100,11 @@ const getBigPicture = (pictures) => {
   });
 };
 
-const closeBigPicture = () => {
+function closeBigPicture () {
   bigPicture.classList.add('hidden');
   document.removeEventListener('keydown', onDocumentKeydown);
   document.body.classList.remove('modal-open');
-
-};
+}
 
 bigPictureCloseElement.addEventListener('click', () => {
   closeBigPicture();

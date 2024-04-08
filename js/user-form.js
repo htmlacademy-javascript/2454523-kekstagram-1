@@ -21,14 +21,10 @@ const onDocumentKeydown = (evt) => {
   if (isEscapeKey(evt)) {
     const errorElement = document.querySelector('.error__inner');
     if (errorElement !== null) {
-      errorElement.remove();
+      closeResultElement(errorElement);
     } else if(document.activeElement !== inputHashTag && document.activeElement !== inputTextDescription){
       evt.preventDefault();
-      imgUploadForm.querySelector('.img-upload__overlay').classList.add('hidden');
-      document.body.classList.remove('modal-open');
-      fileUploadControl.value = '';
-      inputHashTag.value = '';
-      inputTextDescription.value = '';
+      closeUserForm();
     }
   }
 };
@@ -56,14 +52,14 @@ fileUploadControl.addEventListener('change', ()=>{
 });
 
 
-const closeUserForm = () => {
+function closeUserForm () {
   imgUploadForm.querySelector('.img-upload__overlay').classList.add('hidden');
   document.body.classList.remove('modal-open');
   document.removeEventListener('keydown', onDocumentKeydown);
   fileUploadControl.value = '';
   inputHashTag.value = '';
   inputTextDescription.value = '';
-};
+}
 
 
 uploadCancelButton.addEventListener('click', ()=> {
@@ -124,22 +120,22 @@ pristine.addValidator(
 const onDocumentKeydownEscForResultElement = (evt,resultElement) => {
   if (isEscapeKey(evt)) {
     evt.preventDefault();
-    resultElement.remove();
-    submitButton.disabled = false;
+    closeResultElement(resultElement);
   }
 };
 
 const onDocumentClickOutsideResultElement = (evt,resultElement) =>{
   if (!resultElement.querySelector('div').contains(evt.target)) {
-    resultElement.remove();
-    submitButton.disabled = false;
+    closeResultElement(resultElement);
   }
 };
 
-const closeResultElement = (resultElement) => {
+function closeResultElement (resultElement) {
   resultElement.remove();
   submitButton.disabled = false;
-};
+  document.removeEventListener('keydown', onDocumentKeydownEscForResultElement);
+  document.removeEventListener('click', onDocumentClickOutsideResultElement);
+}
 
 const openResultElement = (template) => {
   const resultElement = template.cloneNode(true);
