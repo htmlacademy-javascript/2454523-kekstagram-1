@@ -24,6 +24,7 @@ const onDocumentKeydown = (evt) => {
       closeResultElement(errorElement);
     } else if(document.activeElement !== inputHashTag && document.activeElement !== inputTextDescription){
       evt.preventDefault();
+
       closeUserForm();
     }
   }
