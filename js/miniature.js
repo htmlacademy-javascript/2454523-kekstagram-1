@@ -44,14 +44,14 @@ const clearMiniatureContainer = () => {
 };
 
 const getUniqueRandomMiniatureArray = (picturesFromServer) => {
-  const uniqueRandomMiniatureArray = [];
-  while (uniqueRandomMiniatureArray.length < COUNT_RANDOM_MINIATURES) {
+  const uniqueRandomMiniatures = [];
+  while (uniqueRandomMiniatures.length < COUNT_RANDOM_MINIATURES) {
     const uniqueElement = getRandomArrayElement(picturesFromServer);
-    if (!uniqueRandomMiniatureArray.includes(uniqueElement)) {
-      uniqueRandomMiniatureArray.push(uniqueElement);
+    if (!uniqueRandomMiniatures.includes(uniqueElement)) {
+      uniqueRandomMiniatures.push(uniqueElement);
     }
   }
-  return uniqueRandomMiniatureArray;
+  return uniqueRandomMiniatures;
 };
 
 const onHeaderButtonClick = (evt) => {
@@ -65,8 +65,8 @@ const onHeaderButtonClick = (evt) => {
 const onRandomSortButtonClick = (picturesFromServer, callback) => {
   sortRandomButton.addEventListener('click', (evt) => {
     clearMiniatureContainer();
-    const randomMiniatureArray = getUniqueRandomMiniatureArray(picturesFromServer);
-    callback(randomMiniatureArray);
+    const randomMiniaturesArray = getUniqueRandomMiniatureArray(picturesFromServer);
+    callback(randomMiniaturesArray);
     onHeaderButtonClick(evt);
   }
   );
@@ -91,9 +91,9 @@ const onDiscussedSortButtonClick = (picturesFromServer, callback) => {
       return countOfLikesB - countOfLikesA;
     };
 
-    const sortArray = picturesFromServer.slice().sort(compareMiniature);
+    const sortedPictures = picturesFromServer.slice().sort(compareMiniature);
 
-    callback(sortArray);
+    callback(sortedPictures);
     onHeaderButtonClick(evt);
   });
 };
