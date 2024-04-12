@@ -7,7 +7,6 @@ const RERENDER_DELAY = 500;
 
 const debouncedRenderMiniature = applyDebounce(renderMiniatures, RERENDER_DELAY);
 
-
 const BASE_URL = 'https://28.javascript.htmlacademy.pro/kekstagram';
 
 const getPicturesFromServer = () => {
