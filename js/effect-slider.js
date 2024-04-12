@@ -42,54 +42,30 @@ const updateFilter = () => {
 effectSlider.noUiSlider.on('update', updateFilter);
 
 const updateEffectSlider = () => {
-  if (imgUploadPreview.classList.contains('effects__preview--chrome')) {
-    effectSlider.noUiSlider.updateOptions({
-      range: {
-        min: 0,
-        max: 1,
-      },
-      start: 1,
-      step: 0.1,
-    });
-  } else if (imgUploadPreview.classList.contains('effects__preview--sepia')) {
-    effectSlider.noUiSlider.updateOptions({
-      range: {
-        min: 0,
-        max: 1,
-      },
-      start: 1,
-      step: 0.1,
-    });
-  } else if (imgUploadPreview.classList.contains('effects__preview--marvin')) {
-    effectSlider.noUiSlider.updateOptions({
-      range: {
-        min: 0,
-        max: 100,
-      },
-      start: 100,
-      step: 1,
-    });
-  } else if (imgUploadPreview.classList.contains('effects__preview--phobos')) {
-    effectSlider.noUiSlider.updateOptions({
-      range: {
-        min: 0,
-        max: 3,
-      },
-      start: 3,
-      step: 0.1,
-    });
-  } else if (imgUploadPreview.classList.contains('effects__preview--heat')) {
-    effectSlider.noUiSlider.updateOptions({
-      range: {
-        min: 1,
-        max: 3,
-      },
-      start: 3,
-      step: 0.1,
-    });
-  }
-};
+  const options = {
+    range: {
+      min: 0,
+      max: 1,
+    },
+    start: 1,
+    step: 0.1,
+  };
 
+  if (imgUploadPreview.classList.contains('effects__preview--marvin')) {
+    options.range.max = 100;
+    options.start = 100;
+    options.step = 1;
+  } else if (imgUploadPreview.classList.contains('effects__preview--phobos')) {
+    options.range.max = 3;
+    options.start = 3;
+  } else if (imgUploadPreview.classList.contains('effects__preview--heat')) {
+    options.range.min = 1;
+    options.range.max = 3;
+    options.start = 3;
+  }
+
+  effectSlider.noUiSlider.updateOptions(options);
+};
 
 for (const effectRadio of effectsRadios) {
   effectRadio.addEventListener('change', (evt) => {

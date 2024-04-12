@@ -1,11 +1,11 @@
-import {renderMiniatures} from './ miniature.js';
-import {showAlert, debounce} from './util.js';
+import {renderMiniatures} from './miniature.js';
+import {showAlert, applyDebounce} from './util.js';
 import {openResultElement} from './user-form.js';
-import { onRandomSortButtonClick, onDefaultSortButtonClick, onDiscussedSortButtonClick } from './ miniature.js';
+import { onRandomSortButtonClick, onDefaultSortButtonClick, onDiscussedSortButtonClick } from './miniature.js';
 const RERENDER_DELAY = 500;
 
 
-const debouncedRenderMiniature = debounce(renderMiniatures, RERENDER_DELAY);
+const debouncedRenderMiniature = applyDebounce(renderMiniatures, RERENDER_DELAY);
 
 
 const BASE_URL = 'https://28.javascript.htmlacademy.pro/kekstagram';
@@ -35,7 +35,7 @@ const sendUserFormDatatoServer = (body, onSuccess, successTemplate, errorTemplat
     BASE_URL,
     {
       method: 'POST' ,
-      body
+      body,
     }
   )
     .then((response) => {

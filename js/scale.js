@@ -10,6 +10,7 @@ const imgUploadPreview = imgUploadForm.querySelector('.img-upload__preview').que
 
 
 const setScale = (scaleValue) => {
+  scaleControlValue.setAttribute('value',scaleValue);
   scaleControlValue.value = `${scaleValue }%`;
   imgUploadPreview.style.transform = `scale(${ scaleValue / 100 })`;
 };
